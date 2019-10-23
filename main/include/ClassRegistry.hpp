@@ -5,7 +5,7 @@
 class ClassRegistry
 {
 private:
-	std::map<ReplicationClassID, std::function<GameObject *>> m_LinkIDClassToMethod;
+	std::map<ReplicationClassID, std::function<GameObject*()>> m_LinkIDClassToMethod;
 
 	//Pour que ce soit un singleton
 	static ClassRegistry* m_Instance;
@@ -13,12 +13,12 @@ private:
 public:
 
 	template <class T>
-	void AddClass(ReplicationClassID p_ClassID, std::function<GameObject*> p_Function)
+	void AddClass()
 	{
-		m_LinkIDClassToMethod.insert(std::pair<ReplicationClassID, std::function<T::mClassID>>(p_ClassID, p_Function));
+		m_LinkIDClassToMethod.insert(std::pair<ReplicationClassID, std::function<GameObject*()>>(T::mClassID, new T));
 	}
 
-	GameObject* Create(ReplicationClassID);
+	GameObject* Create(ReplicationClassID p_ClassId);
 
 	//Pour que ce soit un singleton
 	static ClassRegistry* Get()
