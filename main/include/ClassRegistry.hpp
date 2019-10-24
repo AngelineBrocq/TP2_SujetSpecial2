@@ -13,9 +13,10 @@ private:
 public:
 
 	template <class T>
-	void AddClass()
+	uint32_t AddClass()
 	{
 		m_LinkIDClassToMethod.insert(std::pair<ReplicationClassID, std::function<GameObject*()>>(T::mClassID, new T));
+		return T::mClassID;
 	}
 
 	GameObject* Create(ReplicationClassID p_ClassId);
