@@ -13,7 +13,7 @@ static GameObject* CreateInstance() {return new className();}       \
 class GameObject
 {
 public:
-
+	REPLICATED(3265, GameObject);
 	virtual void Destroy();
 	virtual void Write(OutputStream& p_Out);
 	virtual void Read(InputStream& p_In);

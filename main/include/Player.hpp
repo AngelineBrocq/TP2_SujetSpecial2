@@ -17,6 +17,7 @@ private:
 	float m_RotationW;
 
 public:
+	REPLICATED(2586, Player);
 	void Write(OutputStream& p_Out);
 	void Read(InputStream& p_In);
 };
