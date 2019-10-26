@@ -7,7 +7,9 @@ set(replication_sources src/main.cpp
 						src/Player.cpp
 						src/LinkingContext.cpp
 						src/ClassRegistry.cpp
-						src/ReplicationManager.cpp)
+						src/ReplicationManager.cpp
+						src/Server.cpp
+						src/Client.cpp)
 
 include_directories(include)
 set(replication_headers include/game_object.hpp
@@ -17,7 +19,9 @@ set(replication_headers include/game_object.hpp
 						include/Player.hpp
 						include/LinkingContext.hpp
 						include/ClassRegistry.hpp
-						include/ReplicationManager.hpp)
+						include/ReplicationManager.hpp
+						include/Server.hpp
+						include/Client.hpp)
 
 add_executable(tp2 ${replication_sources} ${replication_headers})
 target_link_libraries(tp2 PUBLIC uvw_interface GSL)

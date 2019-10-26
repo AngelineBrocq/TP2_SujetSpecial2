@@ -4,7 +4,20 @@
 
 void ReplicationManager::Replicate(InputStream p_MemoryStream)
 {
+	ClassRegistry* l_Registry = ClassRegistry::Get();
+	LinkingContext* l_Context = LinkingContext::Get();
 
+	if (p_MemoryStream.Read<uint32_t>() != m_ProtocolID)
+		return;
+
+	p_MemoryStream.Read<uint32_t>(); //Lecture du packet id a comparer
+
+	while (ReplicationClassID l_ClassID = p_MemoryStream.Read<ReplicationClassID>())
+	{
+		NetworkID l_NetID = p_MemoryStream.Read<NetworkID>();
+		std::optional<GameObject* > l_GameObject = l_Context->GetGameObject(l_NetID);
+		l_GameObject.value()->Read(p_MemoryStream);
+	}
 }
 
 void ReplicationManager::Replicate(OutputStream p_MemoryStream, std::vector<GameObject*> p_GameObjects)
@@ -12,7 +25,7 @@ void ReplicationManager::Replicate(OutputStream p_MemoryStream, std::vector<Game
 	ClassRegistry* l_Registry = ClassRegistry::Get();
 	for (int i = 0; i < p_GameObjects.size(); i++)
 	{
-		uint32_t l_ClassID = l_Registry->AddClass<GameObject>();
+		ReplicationClassID l_ClassID = l_Registry->AddClass<GameObject>();
 		p_MemoryStream.Write(m_ProtocolID);
 		p_MemoryStream.Write(m_PacketID);
 		p_MemoryStream.Write(l_ClassID);//Identifiant classe
