@@ -15,7 +15,7 @@ public:
 	template <class T>
 	ReplicationClassID AddClass()
 	{
-		m_LinkIDClassToMethod.insert(std::pair<ReplicationClassID, std::function<GameObject*()>>(T::mClassID, new T));
+		m_LinkIDClassToMethod.insert(std::pair<ReplicationClassID, std::function<GameObject*()>>(T::mClassID, &T::CreateInstance));
 		return T::mClassID;
 	}
 

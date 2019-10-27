@@ -13,9 +13,9 @@ Server::Server(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
 
         l_Server.accept(*l_Client);
         l_Client->read();
-        m_ClientsList.push_back(l_Client);
+        
     });
-
+    m_ClientsList.push_back(l_Tcp);
     l_Tcp->bind(p_IPAddress, p_Port);
     l_Tcp->listen();
 }
