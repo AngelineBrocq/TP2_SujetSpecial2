@@ -8,3 +8,5 @@ GameObject* ClassRegistry::Create(ReplicationClassID p_ClassID)
 
 	return nullptr;
 }
+
+ClassRegistry* ClassRegistry::m_Instance = new ClassRegistry;

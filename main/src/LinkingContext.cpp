@@ -39,3 +39,5 @@ NetworkID LinkingContext::GetLastID()
 		return m_LinkIDToGameObject.rbegin()->first;
 	return 1;
 }
+
+LinkingContext* LinkingContext::m_Instance = new LinkingContext;
