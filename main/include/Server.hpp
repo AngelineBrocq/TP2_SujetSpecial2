@@ -1,15 +1,15 @@
-#include <optional>
-#include <vector>
+#pragma once
+
+#include <iostream>
 #include <uvw.hpp>
-#include <memory>
+#include <vector>
+#include "Client.hpp"
 
 class Server
 {
-public:
-	Server(uvw::Loop& loop);
-	~Server() = default;
-	void Send(uint8_t* data, uint8_t size);
-
 private:
-	std::vector<std::shared_ptr<uvw::TCPHandle>> listClients;
+    std::vector<std::shared_ptr<uvw::TCPHandle>> m_ClientsList;
+public:
+    Server(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop);
+    void Send(uint8_t *p_Packet, int p_Size);
 };

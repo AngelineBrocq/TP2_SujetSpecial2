@@ -19,7 +19,7 @@ private:
 	float m_RotationW;
 
 public:
-
+	REPLICATED(1254, Enemy);
 	void Write(OutputStream& p_Out);
 	void Read(InputStream& p_In);
 };

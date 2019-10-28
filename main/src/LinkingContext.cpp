@@ -2,23 +2,12 @@
 
 void LinkingContext::AddIDAndGameObject(NetworkID p_NetID, GameObject* p_GameObject)
 {
-	auto l_Iterator = m_LinkGameObjectToID.find(p_GameObject);
-	if (l_Iterator != m_LinkGameObjectToID.end())
-	{
-		return;
-	}
 	m_LinkGameObjectToID.insert(std::pair<GameObject*, NetworkID>(p_GameObject, p_NetID));
 	m_LinkIDToGameObject.insert(std::pair<NetworkID, GameObject*>(p_NetID, p_GameObject));
 }
 
 void LinkingContext::AddGameObject(GameObject* p_GameObject)
-{
-	auto l_Iterator = m_LinkGameObjectToID.find(p_GameObject);
-	if (l_Iterator != m_LinkGameObjectToID.end())
-	{
-		return;
-	}
-	
+{	
 	NetworkID l_NextID = GetLastID() + 1;
 	m_LinkGameObjectToID.insert(std::pair<GameObject*, NetworkID>(p_GameObject, l_NextID));
 	m_LinkIDToGameObject.insert(std::pair<NetworkID, GameObject*>(l_NextID, p_GameObject));
@@ -50,3 +39,5 @@ NetworkID LinkingContext::GetLastID()
 		return m_LinkIDToGameObject.rbegin()->first;
 	return 1;
 }
+
+LinkingContext* LinkingContext::m_Instance = new LinkingContext;

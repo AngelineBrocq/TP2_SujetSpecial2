@@ -1,24 +1,21 @@
 #include "Server.hpp"
 
-Server::Server(uvw::Loop& loop)
+
+Server::Server(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
 {
-	std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
+    std::shared_ptr<uvw::TCPHandle> l_Tcp = p_Loop.resource<uvw::TCPHandle>();
 
-	tcp->once<uvw::ListenEvent>([](const uvw::ListenEvent&, uvw::TCPHandle& srv) {
-		std::shared_ptr<uvw::TCPHandle> client = srv.loop().resource<uvw::TCPHandle>();
+    l_Tcp->once<uvw::ListenEvent>([](const uvw::ListenEvent &, uvw::TCPHandle &l_Server) {
+        std::shared_ptr<uvw::TCPHandle> l_Client = l_Server.loop().resource<uvw::TCPHandle>();
 
-		client->on<uvw::CloseEvent>([ptr = srv.shared_from_this()](const uvw::CloseEvent&, uvw::TCPHandle&) { ptr->close(); });
-		client->on<uvw::EndEvent>([](const uvw::EndEvent&, uvw::TCPHandle& client) { client.close(); });
+        l_Client->on<uvw::CloseEvent>([l_Ptr = l_Server.shared_from_this()](const uvw::CloseEvent &, uvw::TCPHandle &) { l_Ptr->close(); });
+        l_Client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &l_Client) { l_Client.close(); });
 
-		srv.accept(*client);
-		client->read();
-		});
-
-	tcp->bind("127.0.0.1", 4242);
-	tcp->listen();
-}
-
-void Server::Send(uint8_t* data, uint8_t size) 
-{
-
+        l_Server.accept(*l_Client);
+        l_Client->read();
+        
+    });
+    m_ClientsList.push_back(l_Tcp);
+    l_Tcp->bind(p_IPAddress, p_Port);
+    l_Tcp->listen();
 }

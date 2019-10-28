@@ -7,9 +7,10 @@ class ReplicationManager
 {
 private:
 	std::unordered_set<GameObject*> m_AllGameObjects;
-	uint32_t m_ProtocolID = 210626;
+	uint32_t m_ProtocolID = 211226;
+	uint32_t m_PacketID = 0;
 
 public:
-	void Replicate(MemoryStream p_MemoryStream, std::vector<GameObject*> p_GameObjects);
-	void Replicate(MemoryStream p_MemoryStream);
+	void Replicate(OutputStream p_MemoryStream, std::vector<GameObject*> p_GameObjects);
+	void Replicate(InputStream p_MemoryStream);
 };
