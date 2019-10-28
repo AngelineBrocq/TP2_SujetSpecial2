@@ -5,8 +5,6 @@
 #include "ReplicationManager.hpp"
 #include "ClassRegistry.hpp"
 #include "game_object.hpp"
-#include "player.hpp"
-#include "enemy.hpp"
 #include "streams.hpp"
 
 class Client
