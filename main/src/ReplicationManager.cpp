@@ -7,6 +7,7 @@ void ReplicationManager::Replicate(InputStream p_MemoryStream)
 {
 	ClassRegistry* l_Registry = ClassRegistry::Get();
 	LinkingContext* l_Context = LinkingContext::Get();
+	std::unordered_set<GameObject*> l_ReplicationFlux;
 
 	if (p_MemoryStream.Read<uint32_t>() != m_ProtocolID)
 		return;
@@ -20,9 +21,44 @@ void ReplicationManager::Replicate(InputStream p_MemoryStream)
 		if(l_GameObject == nullptr)
 		{
 			l_GameObject = l_Registry->Create(l_ClassID);
+			l_GameObject.value()->Read(p_MemoryStream);
+			l_Context->AddIDAndGameObject(l_ClassID, l_GameObject.value());
+			l_ReplicationFlux.insert(l_GameObject.value());
 		}
-		l_GameObject.value()->Read(p_MemoryStream);
+		else
+		{
+			l_GameObject.value()->Read(p_MemoryStream);
+			l_ReplicationFlux.insert(l_GameObject.value());
+		}
 	}
+	
+	/*for (std::vector<GameObject*>::iterator l_Ite = l_ReplicationFlux; l_Ite != l_ReplicationFlux.end(); l_Ite++)
+	{
+		if (!m_AllGameObjects.find(l_Ite))
+		{
+			l_Context->DeleteGameObject(l_Ite);
+		}
+	}*/
+
+	/*for each (GameObject* l_GameObjToRemove in l_ReplicationFlux)
+	{
+		if (!m_AllGameObjects.find(l_GameObjToRemove.value()))
+		{
+			l_Context->DeleteGameObject(l_GameObjToRemove.value());
+		}
+	}*/
+
+	std::for_each(l_ReplicationFlux.begin(), l_ReplicationFlux.end(), [this,l_Context](auto l_GameObjToRemove) {
+		
+		if (m_AllGameObjects.find(l_GameObjToRemove) != m_AllGameObjects.end())
+		{
+			l_Context->DeleteGameObject(l_GameObjToRemove);
+		}
+		});
+
+	m_AllGameObjects.clear();
+	m_AllGameObjects = l_ReplicationFlux;
+	l_ReplicationFlux.clear();
 }
 
 void ReplicationManager::Replicate(OutputStream p_MemoryStream, std::vector<GameObject*> p_GameObjects)
