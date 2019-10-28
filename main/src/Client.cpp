@@ -1,6 +1,15 @@
 #include "Client.hpp"
 
-Client::Client(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
+Client::Client(std::string p_IPAddress, int p_Port)
+{
+	m_IPAddress = p_IPAddress;
+	m_Port = p_Port;
+	loop = uvw::Loop::getDefault();
+	connect(*loop);
+	loop->run();
+}
+
+void Client::connect(uvw::Loop& p_Loop)
 {
 	auto l_Tcp = p_Loop.resource<uvw::TCPHandle>();
 
@@ -16,5 +25,5 @@ Client::Client(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
 		std::cout << l_Event.data.get() << std::endl;
 		});
 
-	l_Tcp->connect(p_IPAddress, p_Port);
+	l_Tcp->connect(m_IPAddress, m_Port);
 }
