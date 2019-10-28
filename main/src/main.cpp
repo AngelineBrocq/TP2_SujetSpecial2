@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string_view>
 
 #include <uvw.hpp>
 #include <memory>
@@ -6,11 +7,16 @@
 void listen(uvw::Loop &loop) {
     std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
 
-    tcp->once<uvw::ListenEvent>([](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
+    tcp->on<uvw::ListenEvent>([](const uvw::ListenEvent &, uvw::TCPHandle &srv) {
         std::shared_ptr<uvw::TCPHandle> client = srv.loop().resource<uvw::TCPHandle>();
 
         client->on<uvw::CloseEvent>([ptr = srv.shared_from_this()](const uvw::CloseEvent &, uvw::TCPHandle &) { ptr->close(); });
         client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &client) { client.close(); });
+		client->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &client) {
+			std::string result(evt.data.get(), evt.length);
+			std::cout << "Server receive " << result << std::endl;
+			client.write(evt.data.get(), evt.length);
+		});
 
         srv.accept(*client);
         client->read();
@@ -28,11 +34,12 @@ void conn(uvw::Loop &loop) {
     tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent &, uvw::TCPHandle &tcp) {
         auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'b', 'c' });
         tcp.write(std::move(dataWrite), 2);
-        tcp.close();
+        tcp.read();
     });
 
-    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &){
-        std::cout << evt.data << std::endl;
+    tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &tcp){
+		std::string result(evt.data.get(), evt.length);
+        std::cout << "Client receive " << result << std::endl;
     });
 
     tcp->connect(std::string{"127.0.0.1"}, 4242);
