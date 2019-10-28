@@ -27,3 +27,15 @@ void Player::Read(InputStream& p_In) {
 
 	std::copy(reinterpret_cast<char*>(l_Name.data()), reinterpret_cast<char*>(l_Name.data()) + l_Name.size_bytes(), m_Name);
 }
+
+void Player::Print()
+{
+	std::cout << "Nom : " << m_Name << std::endl;
+	std::cout << "Position x : " << m_PositionX << std::endl;
+	std::cout << "Position y : " << m_PositionY << std::endl;
+	std::cout << "Position z : " << m_PositionZ << std::endl;
+	std::cout << "Rotation x : " << m_RotationX << std::endl;
+	std::cout << "Rotation y : " << m_RotationY << std::endl;
+	std::cout << "Rotation z : " << m_RotationZ << std::endl;
+	std::cout << "Rotation w : " << m_RotationW << std::endl;
+}

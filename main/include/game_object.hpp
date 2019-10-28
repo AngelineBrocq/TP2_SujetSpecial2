@@ -18,4 +18,6 @@ public:
 	virtual void Write(OutputStream& p_Out) {};
 	virtual void Read(InputStream& p_In) {};
 
+	virtual void Print() {};
+
 };

@@ -3,6 +3,8 @@
 #include "LinkingContext.hpp"
 #include <optional>
 
+ReplicationManager* ReplicationManager::m_Instance = new ReplicationManager;
+
 void ReplicationManager::Replicate(InputStream p_MemoryStream)
 {
 	ClassRegistry* l_Registry = ClassRegistry::Get();
@@ -78,4 +80,10 @@ void ReplicationManager::Replicate(OutputStream p_MemoryStream, std::vector<Game
 		p_GameObjects[i]->Write(p_MemoryStream);
 		m_PacketID++;
 	}
+	p_MemoryStream.Flush();
+}
+
+std::unordered_set<GameObject*> ReplicationManager::GetAllGameObjects()
+{
+	return m_AllGameObjects;
 }
