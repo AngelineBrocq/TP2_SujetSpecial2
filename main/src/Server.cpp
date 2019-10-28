@@ -22,8 +22,8 @@ Server::Server(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
 
 void Server::Send(uint8_t *p_Packet, int p_Size)
 {
-	for (std::shared_ptr<uvw::TCPHandle> l_Client : m_ClientsList)
-	{
-
-	}
+	std::cout << "Sending data to all clients" << std::endl;
+	std::for_each(m_ClientsList.begin(), m_ClientsList.end(), [p_Packet, p_Size](auto l_Client) {
+		l_Client->write(reinterpret_cast<char*>(p_Packet), p_Size); 
+	});
 }

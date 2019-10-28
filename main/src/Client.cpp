@@ -9,7 +9,7 @@ Client::Client(std::string p_IPAddress, int p_Port, uvw::Loop &p_Loop)
 	l_Tcp->on<uvw::ConnectEvent>([](const uvw::ConnectEvent&, uvw::TCPHandle& l_Tcp) {
 		auto l_DataWrite = std::unique_ptr<char[]>(new char[2]{ 'b', 'c' });
 		l_Tcp.write(std::move(l_DataWrite), 2);
-		l_Tcp.close();
+		l_Tcp.read();
 		});
 
 	l_Tcp->on<uvw::DataEvent>([](const uvw::DataEvent& l_Event, uvw::TCPHandle&) {
