@@ -33,22 +33,6 @@ void ReplicationManager::Replicate(InputStream p_MemoryStream)
 			l_ReplicationFlux.insert(l_GameObject.value());
 		}
 	}
-	
-	/*for (std::vector<GameObject*>::iterator l_Ite = l_ReplicationFlux; l_Ite != l_ReplicationFlux.end(); l_Ite++)
-	{
-		if (!m_AllGameObjects.find(l_Ite))
-		{
-			l_Context->DeleteGameObject(l_Ite);
-		}
-	}*/
-
-	/*for each (GameObject* l_GameObjToRemove in l_ReplicationFlux)
-	{
-		if (!m_AllGameObjects.find(l_GameObjToRemove.value()))
-		{
-			l_Context->DeleteGameObject(l_GameObjToRemove.value());
-		}
-	}*/
 
 	std::for_each(l_ReplicationFlux.begin(), l_ReplicationFlux.end(), [this,l_Context](auto l_GameObjToRemove) {
 		
