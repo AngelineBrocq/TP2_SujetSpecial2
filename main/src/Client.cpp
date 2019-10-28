@@ -1,13 +1,30 @@
 #include "Client.hpp"
 #include "ReplicationManager.hpp"
 
+#include <iostream>
+
 Client::Client(std::string p_IPAddress, int p_Port)
 {
 	m_IPAddress = p_IPAddress;
 	m_Port = p_Port;
-	loop = uvw::Loop::getDefault();
-	connect(*loop);
-	loop->run();
+	m_Loop = uvw::Loop::getDefault();
+	connect(*m_Loop);
+	m_LoopThread = std::make_unique<std::thread>(&Client::Runner, this);
+
+	// Class Registry Initiation
+	ClassRegistry* classRegistry = ClassRegistry::Get();
+}
+
+void Client::Runner()
+{
+	m_Loop->run();
+}
+
+Client::~Client()
+{
+	if (m_LoopThread->joinable()) {
+		m_LoopThread->join();
+	}
 }
 
 void Client::connect(uvw::Loop& p_Loop)
@@ -23,7 +40,7 @@ void Client::connect(uvw::Loop& p_Loop)
 		});
 
 	l_Tcp->on<uvw::DataEvent>([](const uvw::DataEvent& l_Event, uvw::TCPHandle&) {
-		
+		std::cout << "R" << std::endl;
 		std::string l_Result(l_Event.data.get(), l_Event.length);
 		ReplicationManager* l_ReplicationManager = ReplicationManager::Get();
 

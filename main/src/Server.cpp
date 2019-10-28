@@ -45,6 +45,7 @@ void Server::Send(uint8_t *p_Packet, int p_Size)
 {
 	std::cout << "Sending data to all clients" << std::endl;
 	std::for_each(m_ClientsList.begin(), m_ClientsList.end(), [p_Packet, p_Size](auto l_Client) {
+		std::cout << "C" << std::endl;
 		l_Client->write(reinterpret_cast<char*>(p_Packet), p_Size); 
 	});
 }

@@ -15,7 +15,7 @@ public:
     ~Server();
 	void ListenServer(uvw::Loop& p_Loop);
     void Send(uint8_t *p_Packet, int p_Size);
-	void Server::Run();
+	void Run();
 	void PrepareAndSend(OutputStream& os, std::vector<GameObject*>& gameObjects);
 
 private:

@@ -30,7 +30,9 @@ std::optional<GameObject*> LinkingContext::GetGameObject(NetworkID p_NetId)
 
 std::optional<NetworkID> LinkingContext::GetID(GameObject* p_GameObject)
 {
-	return m_LinkGameObjectToID.find(p_GameObject)->second;
+	if (m_LinkGameObjectToID.find(p_GameObject) != m_LinkGameObjectToID.end()) {
+		return m_LinkGameObjectToID.find(p_GameObject)->second;
+	}
 }
 
 NetworkID LinkingContext::GetLastID()

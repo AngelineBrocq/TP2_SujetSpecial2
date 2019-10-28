@@ -8,9 +8,9 @@
 
 int main(int argc, char* argv[]) {
 
-	std::string l_status = argv[1];
+	std::string l_status =  argv[1];
 	std::string l_addr = argv[2];
-	std::string l_portInput = argv[3];
+	std::string l_portInput =  argv[3];
 	int port = atoi(l_portInput.c_str());
 
 	if (l_status == "server") {
